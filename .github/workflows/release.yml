@@ -1,0 +1,49 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Create Release Zip
+        run: |
+          zip -r elementor-html-builder.zip . \
+          -x "node_modules/*" \
+          -x "src/*" \
+          -x ".git/*" \
+          -x ".github/*" \
+          -x "webpack.config.js" \
+          -x "package.json" \
+          -x "package-lock.json" \
+          -x ".agent/*" \
+          -x ".DS_Store"
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: elementor-html-builder.zip
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
