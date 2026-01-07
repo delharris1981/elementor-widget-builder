@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 /**
  * Custom Post Type registration for EHB Widgets.
  */
-final class CPT
+final class EHB_CPT
 {
 
     public const POST_TYPE = 'ehb_widget';

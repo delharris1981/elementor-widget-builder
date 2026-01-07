@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Elementor HTML Builder
  * Description: Build dynamic Elementor widgets using raw HTML and CSS.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Antigravity
  * Text Domain: elementor-html-builder
  * Requires PHP: 8.2
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define constants
-define('EHB_VERSION', '1.0.3');
+define('EHB_VERSION', '1.0.4');
 define('EHB_PATH', plugin_dir_path(__FILE__));
 define('EHB_URL', plugin_dir_url(__FILE__));
 define('EHB_BASENAME', plugin_basename(__FILE__));
@@ -28,17 +28,21 @@ define('EHB_BASENAME', plugin_basename(__FILE__));
  */
 function ehb_init(): void
 {
-	// Check for Elementor presence first
-	if (!did_action('elementor/loaded') && !class_exists('\Elementor\Plugin')) {
-		add_action('admin_notices', __NAMESPACE__ . '\ehb_missing_elementor_notice');
-		return;
-	}
+	try {
+		// Check for Elementor presence first
+		if (!did_action('elementor/loaded') && !class_exists('\Elementor\Plugin')) {
+			add_action('admin_notices', __NAMESPACE__ . '\ehb_missing_elementor_notice');
+			return;
+		}
 
-	require_once EHB_PATH . 'includes/class-ehb-loader.php';
+		require_once EHB_PATH . 'includes/class-ehb-loader.php';
 
-	if (class_exists(__NAMESPACE__ . '\Loader')) {
-		$loader = new Loader();
-		$loader->run();
+		if (class_exists(__NAMESPACE__ . '\EHB_Loader')) {
+			$loader = new EHB_Loader();
+			$loader->run();
+		}
+	} catch (\Throwable $e) {
+		error_log('EHB Fatal Error: ' . $e->getMessage());
 	}
 }
 

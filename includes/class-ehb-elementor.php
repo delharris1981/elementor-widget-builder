@@ -8,48 +8,53 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if (class_exists('\Elementor\Widget_Base')) {
+/**
+ * Handle Elementor integration and widget registration.
+ */
+final class EHB_Elementor
+{
 
     /**
-     * Handle Elementor integration and widget registration.
+     * Register hooks.
      */
-    final class Elementor
+    public function register(): void
     {
+        add_action('elementor/widgets/register', [$this, 'register_widgets']);
+    }
 
-        /**
-         * Register hooks.
-         */
-        public function register(): void
-        {
-            add_action('elementor/widgets/register', [$this, 'register_widgets']);
+    /**
+     * Register dynamic widgets.
+     */
+    public function register_widgets($widgets_manager): void
+    {
+        if (!class_exists('\ElementorHTMLBuilder\Dynamic_Widget')) {
+            return;
         }
 
-        /**
-         * Register dynamic widgets.
-         */
-        public function register_widgets($widgets_manager): void
-        {
-            $query = new \WP_Query([
-                'post_type' => CPT::POST_TYPE,
-                'post_status' => 'publish',
-                'posts_per_page' => -1,
-            ]);
+        $query = new \WP_Query([
+            'post_type' => EHB_CPT::POST_TYPE,
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+        ]);
 
-            if ($query->have_posts()) {
-                while ($query->have_posts()) {
-                    $query->the_post();
-                    $widgets_manager->register(new Dynamic_Widget(get_the_ID()));
-                }
-                wp_reset_postdata();
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $widgets_manager->register(new Dynamic_Widget(get_the_ID()));
             }
+            wp_reset_postdata();
         }
     }
+}
+
+if (class_exists('\Elementor\Widget_Base')) {
 
     /**
      * Dynamic Elementor Widget class.
      */
     class Dynamic_Widget extends \Elementor\Widget_Base
     {
+        // ... (rest of the class remains the same)
 
         private int $post_id;
 

@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 /**
  * Loader class to manage plugin initialization.
  */
-final class Loader
+final class EHB_Loader
 {
 
     /**
@@ -42,12 +42,12 @@ final class Loader
      */
     private function init_components(): void
     {
-        (new CPT())->register();
-        (new Admin())->register();
-        (new AJAX())->register();
+        (new EHB_CPT())->register();
+        (new EHB_Admin())->register();
+        (new EHB_AJAX())->register();
 
         if (did_action('elementor/loaded')) {
-            (new Elementor())->register();
+            (new EHB_Elementor())->register();
         }
     }
 }

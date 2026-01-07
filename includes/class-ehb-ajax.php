@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 /**
  * Handle AJAX requests for saving widget data.
  */
-final class AJAX
+final class EHB_AJAX
 {
 
     /**
@@ -41,7 +41,7 @@ final class AJAX
         // If post_id is 0, create a new ehb_widget
         if (0 === $post_id) {
             $post_id = wp_insert_post([
-                'post_type' => CPT::POST_TYPE,
+                'post_type' => EHB_CPT::POST_TYPE,
                 'post_status' => 'publish',
                 'post_title' => __('New Widget', 'elementor-html-builder'),
             ]);

@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 /**
  * Admin interface for the EHB Builder.
  */
-final class Admin
+final class EHB_Admin
 {
 
     /**
@@ -29,7 +29,7 @@ final class Admin
     public function add_menu_page(): void
     {
         add_submenu_page(
-            'edit.php?post_type=' . CPT::POST_TYPE,
+            'edit.php?post_type=' . EHB_CPT::POST_TYPE,
             __('Widget Builder', 'elementor-html-builder'),
             __('Widget Builder', 'elementor-html-builder'),
             'manage_options',
