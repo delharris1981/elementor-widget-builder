@@ -43,7 +43,7 @@ final class EHB_Admin
      */
     public function enqueue_assets(string $hook): void
     {
-        if ('ehb_widgets_page_ehb-builder' !== $hook) {
+        if (str_contains($hook, 'ehb-builder') === false && (!isset($_GET['page']) || $_GET['page'] !== 'ehb-builder')) {
             return;
         }
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Elementor HTML Builder
  * Description: Build dynamic Elementor widgets using raw HTML and CSS.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Antigravity
  * Text Domain: elementor-html-builder
  * Requires PHP: 8.2
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define constants
-define('EHB_VERSION', '1.0.4');
+define('EHB_VERSION', '1.0.5');
 define('EHB_PATH', plugin_dir_path(__FILE__));
 define('EHB_URL', plugin_dir_url(__FILE__));
 define('EHB_BASENAME', plugin_basename(__FILE__));
