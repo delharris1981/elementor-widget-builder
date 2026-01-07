@@ -31,7 +31,10 @@ final class Loader
         require_once EHB_PATH . 'includes/class-ehb-cpt.php';
         require_once EHB_PATH . 'includes/class-ehb-admin.php';
         require_once EHB_PATH . 'includes/class-ehb-ajax.php';
-        require_once EHB_PATH . 'includes/class-ehb-elementor.php';
+
+        if (did_action('elementor/loaded')) {
+            require_once EHB_PATH . 'includes/class-ehb-elementor.php';
+        }
     }
 
     /**
@@ -42,6 +45,9 @@ final class Loader
         (new CPT())->register();
         (new Admin())->register();
         (new AJAX())->register();
-        (new Elementor())->register();
+
+        if (did_action('elementor/loaded')) {
+            (new Elementor())->register();
+        }
     }
 }
