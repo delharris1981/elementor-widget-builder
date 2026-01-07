@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EHB;
+namespace ElementorHTMLBuilder;
 
 if (!defined('ABSPATH')) {
     exit;

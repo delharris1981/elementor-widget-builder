@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace EHB;
+namespace ElementorHTMLBuilder;
 
 if (!defined('ABSPATH')) {
 	exit;
 }
 
 // Define constants
-define('EHB_VERSION', '1.0.0');
+define('EHB_VERSION', '1.0.2'); // Fixed versioning
 define('EHB_PATH', plugin_dir_path(__FILE__));
 define('EHB_URL', plugin_dir_url(__FILE__));
 define('EHB_BASENAME', plugin_basename(__FILE__));
@@ -28,16 +28,18 @@ define('EHB_BASENAME', plugin_basename(__FILE__));
  */
 function ehb_init(): void
 {
-	require_once EHB_PATH . 'includes/class-ehb-loader.php';
-
-	// Check for Elementor
-	if (!did_action('elementor/loaded')) {
-		add_action('admin_notices', 'EHB\ehb_missing_elementor_notice');
+	// Check for Elementor presence first
+	if (!did_action('elementor/loaded') && !class_exists('\Elementor\Plugin')) {
+		add_action('admin_notices', __NAMESPACE__ . '\ehb_missing_elementor_notice');
 		return;
 	}
 
-	$loader = new Loader();
-	$loader->run();
+	require_once EHB_PATH . 'includes/class-ehb-loader.php';
+
+	if (class_exists(__NAMESPACE__ . '\Loader')) {
+		$loader = new Loader();
+		$loader->run();
+	}
 }
 
 /**
@@ -59,4 +61,4 @@ function ehb_missing_elementor_notice(): void
 	printf('<div class="notice notice-warning is-dismissible"><p>%s</p></div>', $message);
 }
 
-add_action('plugins_loaded', 'EHB\ehb_init');
+add_action('plugins_loaded', __NAMESPACE__ . '\ehb_init', 20);
